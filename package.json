@@ -1,0 +1,47 @@
+{
+  "name": "todolist",
+  "version": "1.0.0",
+  "description": "A calm, focused task planner.",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "db:up": "docker compose up -d db",
+    "db:stop": "docker compose stop db",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"next.config.ts\" \"postcss.config.mjs\" \"prisma7.config.ts\" \"tsconfig.json\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MHossein20225/TodoList.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/MHossein20225/TodoList/issues"
+  },
+  "homepage": "https://github.com/MHossein20225/TodoList#readme",
+  "dependencies": {
+    "@prisma/client": "^7.10.1",
+    "bcryptjs": "^3.0.3",
+    "lucide-react": "^1.61.0",
+    "next": "^16.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sonner": "^2.0.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "dotenv": "^18.0.8",
+    "postcss": "^8.5.31",
+    "prettier": "^3.9.10",
+    "prisma": "^7.10.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2"
+  }
+}

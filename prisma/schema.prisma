@@ -13,28 +13,51 @@ enum Priority {
   HIGH
 }
 
-model Project {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  color       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  tasks       Task[]
+enum Status {
+  WAITING
+  INPROGRESS
+  DONE
+}
+enum Role {
+  USER
+  ADMIN
 }
 
-model Task {
-  id          String    @id @default(cuid())
-  title       String
-  description String?
-  isCompleted Boolean   @default(false)
-  priority    Priority  @default(MEDIUM)
-  dueDate     DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  projectId   String?
-  project     Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+model User {
+  id String @id @default(cuid())
+  name String
+  email String
+  password String
+  role Role
+  createdAt DateTime @default(now()) 
+  Project Project[]
+  Session Session[]
+}
 
-  @@index([projectId])
-  @@index([isCompleted, dueDate])
+
+model Session {
+  id String @id @default(cuid())
+  userId String
+  loggedAt DateTime @default(now())
+  expiresAt DateTime
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Project {
+  id String @id @default(cuid())
+  name String
+  task Task[]
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}
+model Task {
+  id String @id @default(cuid())
+  name String
+  time DateTime
+  projectId String
+  project Project @relation(fields: [projectId], references: [id])
+  priority Priority
+  status Status
+  createdAt DateTime @default(now()) 
+  @@unique([projectId,name])
 }

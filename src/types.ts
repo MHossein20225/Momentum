@@ -6,8 +6,8 @@ export type Role = "USER" | "ADMIN";
 
 export type Project = {
   name: string;
-  tasks: Task[];
   userId: string;
+  // tasks?: Task[];
 };
 
 export type Task = {

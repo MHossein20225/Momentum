@@ -1,7 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useActionState, useState } from 'react'
 import { Plus, X } from 'lucide-react'
+import { createTaskAction } from '../actions/taskActions'
+import { createProjectAction } from '../actions/projectActions'
+import { toast } from 'sonner'
 
 type ProjectOption = {
   id: string
@@ -16,8 +19,27 @@ export function CreateModal({
   projects?: ProjectOption[]
 }) {
   const [open, setOpen] = useState(false)
+  const [taskState, taskAction, taskPending] = useActionState(
+    createTaskAction,
+    {},
+  )
+  const [projectState, projectAction, projectPending] = useActionState(
+    createProjectAction,
+    {},
+  )
   const isTask = kind === 'task'
   const title = isTask ? 'Create task' : 'Create project'
+
+  if (isTask) {
+    if (taskState.error) toast.error(taskState.error)
+    else if (taskState.message) toast.error(taskState.message)
+  } else {
+    if (projectState.error) toast.error(projectState.error)
+    else if (projectState.message) toast.error(projectState.message)
+  }
+const nameError = isTask
+  ? taskState?.inputError?.name?.[0]
+  : projectState?.inputError?.name?.[0]
 
   return (
     <>
@@ -62,20 +84,25 @@ export function CreateModal({
 
             <form
               className="space-y-4"
-              onSubmit={(event) => event.preventDefault()}
+              action={isTask ? taskAction : projectAction}
+              onSubmit={isTask ? undefined : (event) => event.preventDefault()}
             >
               <label className="block space-y-1.5 text-sm font-medium text-slate-700">
                 {isTask ? 'Task name' : 'Project name'}
                 <input
                   name="name"
-                  required
-                  minLength={3}
                   className="w-full rounded-lg border border-slate-200 px-3 py-2.5 font-normal outline-none focus:border-violet-500"
                   placeholder={
                     isTask ? 'What needs to be done?' : 'Project name'
                   }
                 />
               </label>
+              {nameError && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {nameError}
+                </p>
+              )
+            }
 
               {isTask ? (
                 <>
@@ -83,19 +110,22 @@ export function CreateModal({
                     Description
                     <textarea
                       name="description"
-                      required
                       rows={3}
                       className="w-full resize-y rounded-lg border border-slate-200 px-3 py-2.5 font-normal outline-none focus:border-violet-500"
                       placeholder="Add details"
                     />
                   </label>
+                  {taskState?.inputError?.description?.[0] && (
+                    <p role="alert" className="text-sm text-rose-600">
+                      {taskState.inputError.description[0]}
+                    </p>
+                  )}
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="block space-y-1.5 text-sm font-medium text-slate-700">
                       Due date
                       <input
                         name="dueDate"
                         type="date"
-                        required
                         className="w-full rounded-lg border border-slate-200 px-3 py-2.5 font-normal outline-none focus:border-violet-500"
                       />
                     </label>
@@ -103,7 +133,6 @@ export function CreateModal({
                       Project
                       <select
                         name="projectId"
-                        required
                         defaultValue=""
                         className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 font-normal outline-none focus:border-violet-500"
                       >
@@ -119,6 +148,11 @@ export function CreateModal({
                         ))}
                       </select>
                     </label>
+                    {taskState?.inputError?.projectId?.[0] && (
+                      <p role="alert" className="text-sm text-rose-600">
+                        {taskState.inputError.projectId[0]}
+                      </p>
+                    )}
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="block space-y-1.5 text-sm font-medium text-slate-700">
@@ -133,6 +167,11 @@ export function CreateModal({
                         <option value="HIGH">High</option>
                       </select>
                     </label>
+                    {taskState?.inputError?.priority?.[0] && (
+                      <p role="alert" className="text-sm text-rose-600">
+                        {taskState.inputError.priority[0]}
+                      </p>
+                    )}
                     <label className="block space-y-1.5 text-sm font-medium text-slate-700">
                       Status
                       <select
@@ -145,13 +184,31 @@ export function CreateModal({
                         <option value="DONE">Done</option>
                       </select>
                     </label>
+                    {taskState?.inputError?.status?.[0] && (
+                      <p role="alert" className="text-sm text-rose-600">
+                        {taskState.inputError.status[0]}
+                      </p>
+                    )}
                   </div>
                 </>
               ) : null}
 
               <p className="text-xs text-slate-400">
-                This form is ready for your backend to handle submissions.
+                {isTask
+                  ? 'Submitting saves the task.'
+                  : 'Project saving will be connected later.'}
               </p>
+
+              {isTask && taskState.error && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {taskState.error}
+                </p>
+              )}
+              {isTask && taskState.message && (
+                <p role="status" className="text-sm text-emerald-700">
+                  Task created.
+                </p>
+              )}
               <div className="flex justify-end gap-3 pt-1">
                 <button
                   type="button"
@@ -162,9 +219,10 @@ export function CreateModal({
                 </button>
                 <button
                   type="submit"
+                  disabled={taskPending || projectPending}
                   className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700"
                 >
-                  {title}
+                  {taskPending || projectPending ? 'Creating…' : title}
                 </button>
               </div>
             </form>

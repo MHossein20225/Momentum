@@ -6,7 +6,7 @@ export type Role = 'USER' | 'ADMIN'
 
 export type Project = {
   name: string
-  userId: string
+  // userId: string
   // tasks?: Task[];
 }
 
@@ -17,18 +17,19 @@ export type Task = {
   projectId: string
   priority: Priority
   status: Status
-  createdAt: Date
 }
 
-export const projectSchema = z.object({
-  name: z.string().min(3),
+export const ProjectSchema = z.object({
+  name: z.string().min(3, "نام باید بیشتر از 3 حرف باشد"),
 })
 
-export const taskSchema = z.object({
-  name: z.string().min(3),
-  description: z.string().min(3),
-  dueDate: z.coerce.date(),
-  projectId: z.string().min(1),
-  priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
-  status: z.enum(['WAITING', 'INPROGRESS', 'DONE']),
+export const TaskSchema = z.object({
+  name: z.string().trim().min(3, "نام باید بیشتر از 3 حرف باشد"),
+  description: z.string().trim().min(3, "توضیحات باید بیشتر از 3 حرف باشد"),
+  dueDate: z.coerce.date({
+  error: "یک تاریخ معتبر انتخاب کنید",
+}),
+  projectId: z.string().min(1, "یک پروژه را انتخاب کنید"),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH'], "این اولویت قابل استفاده نیست"),
+  status: z.enum(['WAITING', 'INPROGRESS', 'DONE'], "این وضعیت غیر قابل قبول است"),
 })

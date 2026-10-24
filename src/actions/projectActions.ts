@@ -18,7 +18,6 @@ export async function createProjectAction(
 }> {
   const data = {
     name: formData.get('name'),
-    
   }
   const result = ProjectSchema.safeParse(data)
 

@@ -4,7 +4,6 @@ import { getProjects } from '../../lib/dal/project'
 
 export default async function InboxPage() {
   const projects = await getProjects()
-  
 
   return (
     <section className="mx-auto max-w-5xl p-5 sm:p-8">

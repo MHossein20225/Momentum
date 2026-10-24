@@ -37,10 +37,6 @@ export function CreateModal({
     if (projectState.error) toast.error(projectState.error)
     else if (projectState.message) toast.error(projectState.message)
   }
-const nameError = isTask
-  ? taskState?.inputError?.name?.[0]
-  : projectState?.inputError?.name?.[0]
-
   return (
     <>
       <button
@@ -85,7 +81,6 @@ const nameError = isTask
             <form
               className="space-y-4"
               action={isTask ? taskAction : projectAction}
-              onSubmit={isTask ? undefined : (event) => event.preventDefault()}
             >
               <label className="block space-y-1.5 text-sm font-medium text-slate-700">
                 {isTask ? 'Task name' : 'Project name'}
@@ -97,12 +92,16 @@ const nameError = isTask
                   }
                 />
               </label>
-              {nameError && (
+              {taskState?.inputError?.name?.[0] && (
                 <p role="alert" className="text-sm text-rose-600">
-                  {nameError}
+                  {taskState.inputError.name[0]}
                 </p>
-              )
-            }
+              )}
+              {projectState?.inputError?.name?.[0] && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {projectState.inputError.name[0]}
+                </p>
+              )}
 
               {isTask ? (
                 <>
@@ -193,22 +192,7 @@ const nameError = isTask
                 </>
               ) : null}
 
-              <p className="text-xs text-slate-400">
-                {isTask
-                  ? 'Submitting saves the task.'
-                  : 'Project saving will be connected later.'}
-              </p>
-
-              {isTask && taskState.error && (
-                <p role="alert" className="text-sm text-rose-600">
-                  {taskState.error}
-                </p>
-              )}
-              {isTask && taskState.message && (
-                <p role="status" className="text-sm text-emerald-700">
-                  Task created.
-                </p>
-              )}
+              
               <div className="flex justify-end gap-3 pt-1">
                 <button
                   type="button"

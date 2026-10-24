@@ -21,7 +21,7 @@ export async function getProject(name: string, userId: string) {
 }
 
 export async function createProject(data: Project) {
-  const userId = "wadawd"
+  const userId = 'wadawd'
   const project = await prisma.project.create({
     data: {
       userId: userId,

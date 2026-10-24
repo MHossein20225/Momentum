@@ -24,6 +24,10 @@ export function AppLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const title = titles[pathname] ?? 'Inbox'
 
+  if (pathname === '/login' || pathname === '/register') {
+    return <main className="min-h-screen">{children}</main>
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 md:flex">
       <AppSidebar

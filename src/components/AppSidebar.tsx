@@ -3,6 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CalendarDays, CheckCheck, Inbox, ListTodo, Sun } from 'lucide-react'
+import { CreateModal } from './CreateModal'
+import { ProjectItem } from './ProjectItem'
+
+type SidebarProject = {
+  id: string
+  name: string
+}
 
 const links = [
   { title: 'Inbox', href: '/inbox', icon: Inbox },
@@ -13,9 +20,11 @@ const links = [
 export function AppSidebar({
   open,
   onNavigate,
+  projects = [],
 }: {
   open: boolean
   onNavigate: () => void
+  projects?: SidebarProject[]
 }) {
   const pathname = usePathname()
   return (
@@ -53,16 +62,15 @@ export function AppSidebar({
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
             Projects
           </p>
-          <button
-            type="button"
-            disabled
-            className="text-lg text-slate-400 hover:text-violet-600"
-            aria-label="Add project"
-          >
-            +
-          </button>
+          <CreateModal kind="project" />
         </div>
-        <p className="px-3 py-2 text-sm text-slate-400">No projects yet</p>
+        {projects.length > 0 ? (
+          projects.map((project) => (
+            <ProjectItem key={project.id} name={project.name} />
+          ))
+        ) : (
+          <p className="px-3 py-2 text-sm text-slate-400">No projects yet</p>
+        )}
       </div>
       <div className="absolute inset-x-4 bottom-4 border-t border-slate-200 pt-4">
         <div className="flex items-center gap-3">

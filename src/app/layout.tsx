@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { AppShell } from './AppShell'
+import { getProjects } from '../lib/dal/project'
 import '../styles.css'
 
 export const metadata: Metadata = {
@@ -8,11 +9,19 @@ export const metadata: Metadata = {
   description: 'Momentum keeps your day clear and your work moving.',
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode
+}) {
+  const projects = await getProjects()
+
   return (
     <html lang="en">
       <body>
-        <AppShell>{children}</AppShell>
+        <AppShell projects={projects.map(({ id, name }) => ({ id, name }))}>
+          {children}
+        </AppShell>
       </body>
     </html>
   )

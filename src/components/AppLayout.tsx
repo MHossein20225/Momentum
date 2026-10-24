@@ -13,14 +13,24 @@ const titles: Record<string, string> = {
   '/completed': 'Completed',
 }
 
-export function AppLayout({ children }: { children: ReactNode }) {
+export function AppLayout({
+  children,
+  projects,
+}: {
+  children: ReactNode
+  projects: { id: string; name: string }[]
+}) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const title = titles[pathname] ?? 'Inbox'
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 md:flex">
-      <AppSidebar open={sidebarOpen} onNavigate={() => setSidebarOpen(false)} />
+      <AppSidebar
+        open={sidebarOpen}
+        onNavigate={() => setSidebarOpen(false)}
+        projects={projects}
+      />
       {sidebarOpen && (
         <button
           className="fixed inset-0 z-20 bg-slate-950/30 md:hidden"

@@ -14,7 +14,7 @@ export function TaskItem({ task, compact = false }: TaskItemProps) {
 
   return (
     <article className="flex items-start gap-3 border-b border-slate-100 py-4 last:border-0">
-      {task.isCompleted ? (
+      {task.status ? (
         <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700">
           <Check size={13} />
         </span>
@@ -23,9 +23,9 @@ export function TaskItem({ task, compact = false }: TaskItemProps) {
       )}
       <div className="min-w-0 flex-1">
         <p
-          className={`truncate font-medium ${compact ? 'text-sm' : 'text-[15px]'} ${task.isCompleted ? 'text-slate-400 line-through' : 'text-slate-800'}`}
+          className={`truncate font-medium ${compact ? 'text-sm' : 'text-[15px]'} ${task.status ? 'text-slate-400 line-through' : 'text-slate-800'}`}
         >
-          {task.title}
+          {task.name}
         </p>
         {!compact && task.description && (
           <p className="mt-1 truncate text-sm text-slate-500">
@@ -43,11 +43,6 @@ export function TaskItem({ task, compact = false }: TaskItemProps) {
         <span className="hidden items-center gap-1 text-xs text-slate-500 md:flex">
           <CalendarDays size={13} />
           {dueLabel}
-        </span>
-      )}
-      {task.project && (
-        <span className="hidden max-w-32 truncate text-xs text-slate-500 lg:block">
-          {task.project.name}
         </span>
       )}
     </article>

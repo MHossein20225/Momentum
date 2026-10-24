@@ -1,6 +1,10 @@
-import { Inbox, Plus } from 'lucide-react'
+import { Inbox } from 'lucide-react'
+import { CreateModal } from '../../components/CreateModal'
+import { getProjects } from '../../lib/dal/project'
 
-export default function InboxPage() {
+export default async function InboxPage() {
+  const projects = await getProjects()
+
   return (
     <section className="mx-auto max-w-5xl p-5 sm:p-8">
       <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
@@ -13,14 +17,10 @@ export default function InboxPage() {
             A simple list of everything on your mind.
           </p>
         </div>
-        <button
-          type="button"
-          disabled
-          className="inline-flex cursor-not-allowed items-center gap-2 rounded-lg bg-violet-300 px-4 py-2.5 text-sm font-semibold text-white"
-        >
-          <Plus size={17} />
-          Add task
-        </button>
+        <CreateModal
+          kind="task"
+          projects={projects.map(({ id, name }) => ({ id, name }))}
+        />
       </div>
       <div className="grid min-h-72 place-items-center rounded-xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
         <div>

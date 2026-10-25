@@ -32,10 +32,10 @@ export function CreateModal({
 
   if (isTask) {
     if (taskState.error) toast.error(taskState.error)
-    else if (taskState.message) toast.error(taskState.message)
+    else if (taskState.message) toast.success(taskState.message)
   } else {
     if (projectState.error) toast.error(projectState.error)
-    else if (projectState.message) toast.error(projectState.message)
+    else if (projectState.message) toast.success(projectState.message)
   }
   return (
     <>

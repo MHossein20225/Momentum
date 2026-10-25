@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { CalendarDays, CheckCheck, Inbox, ListTodo, Sun } from 'lucide-react'
 import { CreateModal } from './CreateModal'
 import { ProjectItem } from './ProjectItem'
+import type { CurrentUser } from '../types'
 
 type SidebarProject = {
   id: string
@@ -21,10 +22,12 @@ export function AppSidebar({
   open,
   onNavigate,
   projects = [],
+  currentUser,
 }: {
   open: boolean
   onNavigate: () => void
   projects?: SidebarProject[]
+  currentUser: CurrentUser | null
 }) {
   const pathname = usePathname()
   return (
@@ -73,14 +76,42 @@ export function AppSidebar({
         )}
       </div>
       <div className="absolute inset-x-4 bottom-4 border-t border-slate-200 pt-4">
-        <div className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center rounded-full bg-amber-100 text-xs font-semibold text-amber-800">
-            AM
-          </span>
-          <div>
-            <p className="text-sm font-medium text-slate-800">Your account</p>
+        {currentUser ? (
+          <Link
+            href="/profile"
+            onClick={onNavigate}
+            className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-slate-50"
+          >
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-violet-100 text-sm font-semibold uppercase text-violet-700">
+              {currentUser.name[0]}
+            </span>
+            <span className="min-w-0">
+              <span className="block text-sm font-medium text-slate-800">
+                {currentUser.name}
+              </span>
+              <span className="block truncate text-xs text-slate-500">
+                {currentUser.email}
+              </span>
+            </span>
+          </Link>
+        ) : (
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              href="/login"
+              onClick={onNavigate}
+              className="rounded-lg border border-slate-200 px-3 py-2 text-center text-sm font-medium text-slate-600 hover:bg-slate-50"
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              onClick={onNavigate}
+              className="rounded-lg bg-violet-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-violet-700"
+            >
+              Register
+            </Link>
           </div>
-        </div>
+        )}
       </div>
     </aside>
   )

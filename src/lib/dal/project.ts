@@ -1,6 +1,7 @@
 import 'server-only'
 import { prisma } from '../prisma'
 import type { Project } from '../../types'
+import { getCurrentUser } from './user'
 
 export async function getProjects() {
   const project = await prisma.project.findMany()
@@ -21,12 +22,18 @@ export async function getProject(name: string, userId: string) {
 }
 
 export async function createProject(data: Project) {
-  const userId = 'wadawd'
+  const user = await getCurrentUser()
+
+  if (!user) {
+    return false
+  }
+
   const project = await prisma.project.create({
     data: {
-      userId: userId,
+      userId: user.id,
       name: data.name,
     },
   })
+
   return project
 }

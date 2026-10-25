@@ -25,13 +25,18 @@ export type User = {
   password: string
   confirmPassword?: string
 }
+
+export type CurrentUser = {
+  name: string
+  email: string
+  role: Role
+}
 export const UserSchema = z.object({
   name: z.string().trim().min(3, 'نام باید بیشتر از 3 حرف باشد'),
-  email: z.string().trim().email("ایمیل نامعتبر است"),
-  password: z.string().trim().min(6, "رمز عبور کمتر از 6 حرف نباشد"),
-  confirmPassword: z.string().optional()
+  email: z.string().trim().email('ایمیل نامعتبر است'),
+  password: z.string().trim().min(6, 'رمز عبور کمتر از 6 حرف نباشد'),
+  confirmPassword: z.string().optional(),
 })
-
 
 export const ProjectSchema = z.object({
   name: z.string().trim().min(3, 'نام باید بیشتر از 3 حرف باشد'),

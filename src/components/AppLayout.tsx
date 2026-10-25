@@ -5,20 +5,24 @@ import { Bell, Menu, Sun } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { toast } from 'sonner'
 import { AppSidebar } from './AppSidebar'
+import type { CurrentUser } from '../types'
 
 const titles: Record<string, string> = {
   '/inbox': 'Inbox',
   '/today': 'Today',
   '/upcoming': 'Upcoming',
   '/completed': 'Completed',
+  '/profile': 'Profile',
 }
 
 export function AppLayout({
   children,
   projects,
+  currentUser,
 }: {
   children: ReactNode
   projects: { id: string; name: string }[]
+  currentUser: CurrentUser | null
 }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -34,6 +38,7 @@ export function AppLayout({
         open={sidebarOpen}
         onNavigate={() => setSidebarOpen(false)}
         projects={projects}
+        currentUser={currentUser}
       />
       {sidebarOpen && (
         <button

@@ -5,20 +5,39 @@ import { ListTodo } from 'lucide-react'
 import { useActionState } from 'react'
 import { createUserAction, loggedInUserAction } from '../actions/userAction'
 import { toast } from 'sonner'
+import { redirect } from 'next/navigation'
 
 export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
   const isRegister = mode === 'register'
-  const [registerState, registerAction, registerPending] = useActionState(createUserAction, {})
-  const [logInState, logInAction, logInPending] = useActionState(loggedInUserAction, {})
+  const [registerState, registerAction, registerPending] = useActionState(
+    createUserAction,
+    {},
+  )
+  const [logInState, logInAction, logInPending] = useActionState(
+    loggedInUserAction,
+    {},
+  )
 
   const title = isRegister ? 'Create account' : 'Enter'
 
   if (isRegister) {
-    if (registerState.error) toast.error(registerState.error)
-    else if (registerState.message) toast.error(registerState.message)
+    if (registerState.error) {
+      toast.error(registerState.error)
+    } else if (registerState.message) {
+      toast.success(registerState.message)
+      setTimeout(() => {
+        redirect('/login')
+      }, 2000)
+    }
   } else {
-    if (logInState.error) toast.error(logInState.error)
-    else if (logInState.message) toast.error(logInState.message)
+    if (logInState.error) {
+      toast.error(logInState.error)
+    } else if (logInState.message) {
+      toast.success(logInState.message)
+      setTimeout(() => {
+        redirect('/inbox')
+      }, 2000)
+    }
   }
   return (
     <main className="grid min-h-screen bg-slate-50 lg:grid-cols-2">
@@ -62,6 +81,11 @@ export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
                   />
                 </label>
               )}
+              {registerState?.inputError?.name?.[0] && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {registerState.inputError.name[0]}
+                </p>
+              )}
 
               <label className="block space-y-2 text-sm font-medium text-slate-700">
                 Email address
@@ -73,6 +97,16 @@ export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
                 />
               </label>
 
+              {registerState?.inputError?.email?.[0] && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {registerState.inputError.email[0]}
+                </p>
+              )}
+              {logInState?.inputError?.email?.[0] && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {logInState.inputError.email[0]}
+                </p>
+              )}
               <label className="block space-y-2 text-sm font-medium text-slate-700">
                 Password
                 <input
@@ -82,6 +116,16 @@ export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
                   placeholder="At least 8 characters"
                 />
               </label>
+              {registerState?.inputError?.password?.[0] && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {registerState.inputError.password[0]}
+                </p>
+              )}
+              {logInState?.inputError?.password?.[0] && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {logInState.inputError.password[0]}
+                </p>
+              )}
 
               {isRegister && (
                 <label className="block space-y-2 text-sm font-medium text-slate-700">
@@ -93,6 +137,11 @@ export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
                     placeholder="Enter your password again"
                   />
                 </label>
+              )}
+              {registerState?.inputError?.confirmPassword?.[0] && (
+                <p role="alert" className="text-sm text-rose-600">
+                  {registerState.inputError.confirmPassword[0]}
+                </p>
               )}
 
               {/* {!isRegister && (

@@ -13,8 +13,8 @@ export function TaskItem({ task, compact = false }: TaskItemProps) {
     : null
 
   return (
-    <article className="flex items-start gap-3 border-b border-slate-100 py-4 last:border-0">
-      {task.status ? (
+    <article className="grid grid-cols-[20px_minmax(0,1fr)_auto_auto] items-center gap-3 border-b border-slate-100 py-4 last:border-0">
+      {task.status === 'DONE' ? (
         <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700">
           <Check size={13} />
         </span>
@@ -23,7 +23,7 @@ export function TaskItem({ task, compact = false }: TaskItemProps) {
       )}
       <div className="min-w-0 flex-1">
         <p
-          className={`truncate font-medium ${compact ? 'text-sm' : 'text-[15px]'} ${task.status ? 'text-slate-400 line-through' : 'text-slate-800'}`}
+          className={`truncate font-medium ${compact ? 'text-sm' : 'text-[15px]'} ${task.status === 'DONE' ? 'text-slate-400 line-through' : 'text-slate-800'}`}
         >
           {task.name}
         </p>

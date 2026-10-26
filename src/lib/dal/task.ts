@@ -3,6 +3,11 @@ import type { Task } from '../../types'
 import { prisma } from '../prisma'
 import { getCurrentUser } from './user'
 
+export async function getTasks() {
+  const tasks = prisma.task.findMany()
+  return tasks
+}
+
 export async function createTask(data: Task) {
   const user = await getCurrentUser()
 

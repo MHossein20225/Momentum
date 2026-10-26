@@ -3,6 +3,7 @@
 import type z from 'zod'
 import { ProjectSchema } from '../types'
 import { createProject } from '../lib/dal/project'
+import { revalidatePath } from 'next/cache'
 
 export async function createProjectAction(
   _previousState: {
@@ -26,6 +27,9 @@ export async function createProjectAction(
   const project = result.data
 
   const response = await createProject(project)
-  if (!response) return { error: 'پروژه ساخته نشد' }
+  if ('error' in response) {
+    return { error: response.error }
+  }
+  revalidatePath("/inbox")
   return { message: 'پروژه ساخته شد' }
 }

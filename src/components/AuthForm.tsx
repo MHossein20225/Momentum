@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import { ListTodo } from 'lucide-react'
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { createUserAction, loggedInUserAction } from '../actions/userAction'
 import { toast } from 'sonner'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
   const isRegister = mode === 'register'
@@ -17,28 +17,27 @@ export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
     loggedInUserAction,
     {},
   )
+  const router = useRouter()
 
   const title = isRegister ? 'Create account' : 'Enter'
+  const actionState = isRegister ? registerState : logInState
 
-  if (isRegister) {
-    if (registerState.error) {
-      toast.error(registerState.error)
-    } else if (registerState.message) {
-      toast.success(registerState.message)
-      setTimeout(() => {
-        redirect('/login')
-      }, 2000)
+  useEffect(() => {
+    if (actionState.error) {
+      toast.error(actionState.error)
+      return
     }
-  } else {
-    if (logInState.error) {
-      toast.error(logInState.error)
-    } else if (logInState.message) {
-      toast.success(logInState.message)
-      setTimeout(() => {
-        redirect('/inbox')
-      }, 2000)
+
+    if (actionState.message) {
+      toast.success(actionState.message)
+      const timeout = window.setTimeout(
+        () => router.replace(isRegister ? '/login' : '/inbox'),
+        2000,
+      )
+      return () => window.clearTimeout(timeout)
     }
-  }
+  }, [actionState, isRegister, router])
+
   return (
     <main className="grid min-h-screen bg-slate-50 lg:grid-cols-2">
       <section className="flex items-center justify-center px-5 py-12 sm:px-8">

@@ -3,6 +3,7 @@
 import type z from 'zod'
 import { TaskSchema } from '../types'
 import { createTask } from '../lib/dal/task'
+import { revalidatePath } from 'next/cache'
 
 export async function createTaskAction(
   _previousState: {
@@ -31,6 +32,9 @@ export async function createTaskAction(
   const task = result.data
 
   const response = await createTask(task)
-  if (!response) return { error: 'تسک ساخته نشد' }
+  if ('error' in response) {
+    return { error: response.error }
+  }
+  revalidatePath("/inbox")
   return { message: 'تسک ساخته شد' }
 }

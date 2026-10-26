@@ -61,7 +61,7 @@ export async function loggedInUser(
     expires: expiresAt,
   })
 
-  return { success: true }
+  return { message: true }
 }
 
 export async function getCurrentUser() {

@@ -25,7 +25,7 @@ export async function createProject(data: Project) {
   const user = await getCurrentUser()
 
   if (!user) {
-    return false
+    return {error: "اجازه اضافه کردن پروژه را ندارید"}
   }
 
   const project = await prisma.project.create({

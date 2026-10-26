@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import { createTaskAction } from '../actions/taskActions'
 import { createProjectAction } from '../actions/projectActions'
@@ -30,13 +30,13 @@ export function CreateModal({
   const isTask = kind === 'task'
   const title = isTask ? 'Create task' : 'Create project'
 
-  if (isTask) {
-    if (taskState.error) toast.error(taskState.error)
-    else if (taskState.message) toast.success(taskState.message)
-  } else {
-    if (projectState.error) toast.error(projectState.error)
-    else if (projectState.message) toast.success(projectState.message)
-  }
+  const actionState = isTask ? taskState : projectState
+
+  useEffect(() => {
+    if (actionState.error) toast.error(actionState.error)
+    else if (actionState.message) toast.success(actionState.message)
+  }, [actionState])
+
   return (
     <>
       <button
@@ -192,7 +192,6 @@ export function CreateModal({
                 </>
               ) : null}
 
-              
               <div className="flex justify-end gap-3 pt-1">
                 <button
                   type="button"

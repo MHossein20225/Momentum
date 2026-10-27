@@ -61,12 +61,19 @@ export function AppSidebar({
         ))}
       </nav>
       <div className="mt-8">
-        <div className="mb-2 flex items-center justify-between px-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-            Projects
+        {currentUser ? (
+          <div className="mb-2 flex items-center justify-between px-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Projects
+            </p>
+            <CreateModal kind="project" />
+          </div>
+        ) : (
+          <p className="text-xs font-semibold uppercase tracking-wider text-red-600">
+            باید وارد اکانت خود شوید
           </p>
-          <CreateModal kind="project" />
-        </div>
+        )}
+
         {projects.length > 0 ? (
           projects.map((project) => (
             <ProjectItem key={project.id} name={project.name} />

@@ -1,6 +1,12 @@
 # TodoList
 
-A focused task planner built with Next.js, TypeScript, Prisma, and PostgreSQL. It includes an inbox and project-based task workflow, with sign-in for user-specific work.
+A personal task planner built with Next.js, TypeScript, Prisma, and PostgreSQL.
+
+## About the project
+
+The app organizes work into an inbox, projects, and date or status views for today, upcoming, and completed tasks. Users can create projects and tasks, then track each task's description, due date, priority, and status. Sign-in keeps projects tied to their owner, and Prisma stores users, projects, sessions, and tasks in PostgreSQL.
+
+Next.js pages are in `src/app/`; project and task operations are implemented as server actions in `src/actions/`.
 
 ## Local development
 
